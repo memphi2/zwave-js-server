@@ -404,8 +404,30 @@ export class EventForwarder {
       );
     });
 
+    node.on("wake up", (changedNode: ZWaveNode, oldStatus: NodeStatus) => {
+      this.clientsController.sendEventToListeningClients(
+        {
+          source: "node",
+          event: "wake up",
+          nodeId: changedNode.nodeId,
+          oldStatus,
+        },
+        { maxSchemaVersion: 51 },
+      );
+      this.clientsController.sendEventToListeningClients(
+        {
+          source: "node",
+          event: "wake up",
+          nodeId: changedNode.nodeId,
+          oldStatus,
+          lastAwake: changedNode.lastAwake,
+        },
+        { minSchemaVersion: 52 },
+      );
+    });
+
     {
-      const events: ZWaveNodeEvents[] = ["wake up", "sleep", "dead", "alive"];
+      const events: ZWaveNodeEvents[] = ["sleep", "dead", "alive"];
       for (const event of events) {
         node.on(event, (changedNode: ZWaveNode, oldStatus: NodeStatus) =>
           notifyNode(changedNode, event, { oldStatus }),
