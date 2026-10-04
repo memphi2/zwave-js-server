@@ -423,6 +423,10 @@ export interface NodeStateSchema51 extends NodeStateSchema47 {
   endpointGroups?: EndpointGroupState[];
 }
 
+export interface NodeStateSchema52 extends NodeStateSchema51 {
+  lastAwake: MaybeNotKnown<Date>;
+}
+
 export type NodeState =
   | NodeStateSchema0
   | NodeStateSchema1
@@ -438,7 +442,8 @@ export type NodeState =
   | NodeStateSchema35
   | NodeStateSchema42
   | NodeStateSchema47
-  | NodeStateSchema51;
+  | NodeStateSchema51
+  | NodeStateSchema52;
 
 export interface FoundNodeStateSchema19 {
   nodeId: number;
@@ -818,7 +823,13 @@ export const dumpNode = (node: ZWaveNode, schemaVersion: number): NodeState => {
       dumpEndpointGroup,
     );
   }
-  return node51;
+  if (schemaVersion < 52) {
+    return node51;
+  }
+
+  const node52 = node51 as NodeStateSchema52;
+  node52.lastAwake = node.lastAwake;
+  return node52;
 };
 
 export const dumpEndpointGroup = (
