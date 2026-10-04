@@ -408,3 +408,8 @@ Base schema.
 ## Schema 51
 
 - Added the `endpointGroups` property to the node state. It lists the endpoint groups from the node's device config file whose conditions match the device. Endpoint groups semantically group the endpoints of a device, like the individual clamps of a multi-clamp energy meter. Each group contains its `id`, `label`, `isMainDevice` flag and `endpointIndices`. `endpointIndices` is taken from the config file as-is and may include endpoints the node doesn't have.
+
+## Schema 52
+
+- Added the `lastAwake` property to the node state.
+- Added the `lastAwake` property to the `wake up` node event.
